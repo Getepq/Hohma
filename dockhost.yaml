@@ -9,11 +9,13 @@ services:
     env:
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY}
+      GUILD_ID: ${GUILD_ID}
     
     volumes:
-      - bot-data:/app
+      - data:/app/data
     
     restart: always
 
 volumes:
-  bot-data:
+  data:
+    external: true
