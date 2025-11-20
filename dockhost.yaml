@@ -1,0 +1,19 @@
+version: "1.0"
+
+services:
+  discord-bot:
+    image: 
+      context: .
+      dockerfile: Dockerfile
+    
+    env:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY}
+    
+    volumes:
+      - bot-data:/app
+    
+    restart: always
+
+volumes:
+  bot-data:
