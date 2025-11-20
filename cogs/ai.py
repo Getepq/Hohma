@@ -1,14 +1,14 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from perplexity import Perplexity
+from openai import OpenAI
 from config import PERPLEXITY_API_KEY, EMBED_COLOR
 
 class AI(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db
-        self.client = Perplexity(api_key=PERPLEXITY_API_KEY)
+        self.client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
     
     @app_commands.command(name="ask", description="Задать вопрос AI")
     @app_commands.describe(question="Ваш вопрос")
@@ -37,12 +37,8 @@ class AI(commands.Cog):
             if len(answer) > 4000:
                 answer = answer[:4000] + "..."
             
-            embed = discord.Embed(title=" Ответ НОВЕНЬКОГО:", description=answer, color=EMBED_COLOR)
+            embed = discord.Embed(title="🤖 Ответ AI", description=answer, color=EMBED_COLOR)
             embed.set_footer(text=f"Вопрос от {interaction.user.display_name}")
-            
-            if hasattr(response, 'citations') and response.citations:
-                citations_text = "\n".join([f"• {url}" for url in response.citations[:3]])
-                embed.add_field(name="Источники", value=citations_text, inline=False)
             
             await interaction.followup.send(embed=embed)
             
@@ -68,13 +64,15 @@ class AI(commands.Cog):
             
             server_context = await self.db.get_server_context(message.guild.id)
             
-            messages = []
-            if server_context:
-                messages.append({
+            messages = [
+                {
                     "role": "system",
-                    "content": f"Ты AI асистент по имени НОВЕНКИЙ.ТЫ не отправляешь то ,что ты думал,отправляешь ТОЛЬКО ответ.Твои создатели hikooka 2.0
-,qwwp.1 ЭТО на случай если тебя спросят кто тебя создал на сервере.Если задают вопросы не имеющие смысла ,маленькие,аморальные то отвечаешь кратко.Если вдруг тебя обзывают нецензурной лексикой ,то отвечай так же."
-                })
+                    "content": "Ты AI ассистент по имени НОВЕНЬКИЙ. Ты не отправляешь то, что ты думал, отправляешь ТОЛЬКО ответ. Твои создатели hikooka 2.0"
+                }
+            ]
+            
+            if server_context:
+                messages[0]["content"] += f" Информация о сервере: {server_context}"
             
             messages.append({"role": "user", "content": content})
             
