@@ -21,7 +21,12 @@ class AI(commands.Cog):
         if server_context:
             messages.append({
                 "role": "system",
-                "content": f"Ты AI ассистент Discord сервера. Информация о сервере: {server_context}"
+                "content": f"Ты AI ассистент Discord сервера. Отвечай кратко и по делу, без длинных текстов. Не используй цитаты в квадратных скобках типа [1][2][3]. Если нужно указать источник, вставь прямую ссылку в текст. Информация о сервере: {server_context}"
+            })
+        else:
+            messages.append({
+                "role": "system",
+                "content": "Ты AI ассистент Discord сервера. Отвечай кратко и по делу, без длинных текстов ЕСЛИ ТОГО НЕ ТРЕБУЕТСЯ. Не используй цитаты в квадратных скобках типа [1][2][3]. Если нужно указать источник, вставь прямую ссылку в текст."
             })
         
         messages.append({"role": "user", "content": question})
@@ -33,6 +38,10 @@ class AI(commands.Cog):
             )
             
             answer = response.choices[0].message.content
+            
+            # Убираем цитаты в квадратных скобках [1][2][3] и т.д.
+            import re
+            answer = re.sub(r'\[\d+\]', '', answer)
             
             if len(answer) > 4000:
                 answer = answer[:4000] + "..."
@@ -67,7 +76,7 @@ class AI(commands.Cog):
             messages = [
                 {
                     "role": "system",
-                    "content": "Ты AI ассистент по имени НОВЕНЬКИЙ. Ты не отправляешь то, что ты думал, отправляешь ТОЛЬКО ответ. Твои создатели hikooka 2.0"
+                    "content": "Ты AI ассистент по имени НОВЕНЬКИЙ. Отвечай КРАТКО и ПО ДЕЛУ, максимум 2-3 предложения. Не пиши длинные тексты. Не используй цитаты в квадратных скобках [1][2][3]. Если нужен источник, вставь прямую ссылку. Ты не отправляешь то, что ты думал, отправляешь ТОЛЬКО ответ. Твои создатели hikooka 2.0"
                 }
             ]
             
@@ -84,6 +93,10 @@ class AI(commands.Cog):
                     )
                     
                     answer = response.choices[0].message.content
+                    
+                    # Убираем цитаты в квадратных скобках [1][2][3] и т.д.
+                    import re
+                    answer = re.sub(r'\[\d+\]', '', answer)
                     
                     if len(answer) > 2000:
                         answer = answer[:2000] + "..."
