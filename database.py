@@ -4,9 +4,8 @@ import os
 class Database:
     def __init__(self, db_path=None):
         if db_path is None:
-            data_dir = '/app/data' if os.path.exists('/app') else '.'
-            os.makedirs(data_dir, exist_ok=True)
-            self.db_path = os.path.join(data_dir, 'bot_data.db')
+            # Путь напрямую в корень сетевого диска
+            self.db_path = '/data/bot_data.db'
         else:
             self.db_path = db_path
         
