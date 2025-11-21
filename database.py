@@ -12,6 +12,15 @@ class Database:
     async def init_db(self):
         print(f"Попытка инициализации базы данных: {self.db_path}")
         
+        # ДОБАВЛЕНО: Проверка и создание директории
+        data_dir = os.path.dirname(self.db_path)
+        if not os.path.exists(data_dir):
+            try:
+                os.makedirs(data_dir, exist_ok=True)
+                print(f"Создана директория: {data_dir}")
+            except Exception as e:
+                raise RuntimeError(f"Не удалось создать директорию {data_dir}: {e}")
+        
         async with aiosqlite.connect(self.db_path) as db:
             await db.execute('''
                 CREATE TABLE IF NOT EXISTS warnings (
