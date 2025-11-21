@@ -1,15 +1,15 @@
-version: "1.0"
+version: "3.8"
 
 services:
   discord-bot:
-    image: 
+    build:
       context: .
       dockerfile: Dockerfile
     
-    env:
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY}
-      GUILD_ID: ${GUILD_ID}
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - PERPLEXITY_API_KEY=${PERPLEXITY_API_KEY}
+      - GUILD_ID=${GUILD_ID}
     
     volumes:
       - data:/data
@@ -18,3 +18,4 @@ services:
 
 volumes:
   data:
+    driver: local
