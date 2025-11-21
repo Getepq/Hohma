@@ -85,7 +85,7 @@ class AI(commands.Cog):
             
             # Отправляем embed с ответом
             embed = discord.Embed(
-                title="🤖 Ответ AI",
+                title="Ответ от НОВЕНЬКОГО:",
                 description=answer,
                 color=EMBED_COLOR
             )
