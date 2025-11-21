@@ -12,7 +12,7 @@ services:
       GUILD_ID: ${GUILD_ID}
     
     volumes:
-      - data:/app/data
+      - data:/data
     
     restart: always
 
