@@ -10,16 +10,7 @@ class Database:
             self.db_path = db_path
         
     async def init_db(self):
-        # Проверяем существование директории и права доступа
-        data_dir = os.path.dirname(self.db_path)
-        
-        if not os.path.exists(data_dir):
-            raise RuntimeError(f"Директория {data_dir} не существует. Проверьте монтирование volume.")
-        
-        if not os.access(data_dir, os.W_OK):
-            raise RuntimeError(f"Нет прав на запись в директорию {data_dir}")
-        
-        print(f"Инициализация базы данных: {self.db_path}")
+        print(f"Попытка инициализации базы данных: {self.db_path}")
         
         async with aiosqlite.connect(self.db_path) as db:
             await db.execute('''
